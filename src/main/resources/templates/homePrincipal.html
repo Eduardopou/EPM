@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cañón de Santa Elena</title>
+  <link rel="stylesheet" th:href="@{/css/homePrincipalStyle.css}">
+</head>
+<body>
+
+<header>
+  <h1>Cañón de Santa Elena</h1>
+  <p>Área Natural Protegida - México</p>
+
+  <div sec:authorize="isAuthenticated()">
+    <p class="welcome-message">¡Bienvenido, <span sec:authentication="name"></span>!</p>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit">Cerrar sesión</button>
+    </form>
+
+    <form th:action="@{/perfil}" method="get">
+      <button type="submit">Ir a perfil </button>
+    </form>
+  </div>
+
+  <div sec:authorize="!isAuthenticated()">
+    <button onclick="window.location.href='/login'">Iniciar Sesión</button>
+  </div>
+</header>
+
+<nav>
+  <a th:href="@{/}">Inicio</a>
+  <a th:href="@{/animales}">Fauna</a>
+  <a th:href="@{/programa}">Programas</a>
+  <a th:href="@{/reglas}">Reglamento</a>
+  <a th:href="@{/investigaciones}">Investigaciones</a>
+  <a th:href="@{/noticias}">Noticias</a>
+
+</nav>
+
+<div class="container">
+  <h2>Bienvenidos al Cañón de Santa Elena</h2>
+  <p>
+    Aquí podrás encontrar información valiosa sobre la flora, fauna y las investigaciones más recientes
+    del Área Natural Protegida del Cañón de Santa Elena, ubicada en México.
+  </p>
+  <img th:src="@{/images/santa.jpg}" alt="Cañón de Santa Elena">
+</div>
+
+<!-- Contenedor del Mapa -->
+<div class="map-container">
+  <h2>Ubicación del Área Natural</h2>
+  <img th:src="@{/images/mapa.jpg}" alt="Mapa del Cañón de Santa Elena">
+</div>
+
+<!-- Galería de Imágenes -->
+<div class="gallery-container">
+  <h2>Galería de la Zona Protegida</h2>
+  <div class="gallery">
+    <img th:src="@{/images/galeria1.jpg}" alt="Galería 1">
+    <img th:src="@{/images/galeria2.jpg}" alt="Galería 2">
+    <img th:src="@{/images/galeria3.jpg}" alt="Galería 3">
+    <img th:src="@{/images/galeria4.jpg}" alt="Galería 4">
+    <img th:src="@{/images/galeria5.jpg}" alt="Galería 5">
+  </div>
+</div>
+
+
+<footer>
+  &copy; 2025 Cañón de Santa Elena. Todos los derechos reservados.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cañón de Santa Elena</title>
+  <link rel="stylesheet" th:href="@{/css/reglasStyle.css}">
+</head>
+<body>
+
+<header>
+  <h1>Cañón de Santa Elena</h1>
+  <p>Área Natural Protegida - México</p>
+
+  <div class="header-actions" sec:authorize="isAuthenticated()">
+    <form th:action="@{/perfil}" method="get">
+      <button type="submit">Ir a perfil</button>
+    </form>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit">Cerrar sesión</button>
+    </form>
+  </div>
+
+  <div class="header-actions" sec:authorize="!isAuthenticated()">
+    <button onclick="window.location.href='/login'">Iniciar Sesión</button>
+  </div>
+</header>
+
+<nav>
+  <a th:href="@{/}">Inicio</a>
+  <a th:href="@{/animales}">Fauna</a>
+  <a th:href="@{/programa}">Programas</a>
+  <a th:href="@{/reglas}">Reglamento</a>
+  <a th:href="@{/investigaciones}">Investigaciones</a>
+  <a th:href="@{/noticias}">Noticias</a>
+
+</nav>
+
+<div class="content">
+  <div class="table-container">
+    <h2>Reglas en el Cañón de Santa Elena</h2>
+    <input type="text" id="search" class="search-bar" placeholder="🔍 Buscar regla..." onkeyup="filtrarTabla()">
+
+    <div class="table-wrapper">
+      <table id="animalTable">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="regla : ${listaReglas}">
+          <td th:text="${regla.numeroRegla}"></td>
+          <td>
+            <button class="info-button"
+                    th:attr="data-numero=${regla.numeroRegla}, data-descripcion=${regla.descripcionRegla}"
+                    onclick="mostrarDesdeDataset(this)">
+              Mostrar Información
+            </button>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(listaReglas)}">
+          <td colspan="2">No hay reglas disponibles.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="info-container">
+    <h2>Descripción de la regla</h2>
+    <p id="animalInfo">Selecciona una regla para ver más información.</p>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Cañón de Santa Elena. Todos los derechos reservados.
+</footer>
+
+<!-- Importamos el archivo JS -->
+<script th:src="@{/js/reglas-script.js}"></script>
+
+</body>
+</html>

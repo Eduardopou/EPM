@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cañón de Santa Elena</title>
+  <link rel="stylesheet" th:href="@{/css/investigacionesStyle.css}">
+</head>
+<body>
+
+<header>
+  <h1>Cañón de Santa Elena</h1>
+  <p>Área Natural Protegida - México</p>
+
+  <div sec:authorize="isAuthenticated()">
+    <p class="welcome-message">¡Bienvenido, <span sec:authentication="name"></span>!</p>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit">Cerrar sesión</button>
+    </form>
+
+    <form th:action="@{/perfil}" method="get">
+      <button type="submit">Ir a perfil </button>
+    </form>
+  </div>
+
+  <div sec:authorize="!isAuthenticated()">
+    <button onclick="window.location.href='/login'">Iniciar Sesión</button>
+  </div>
+</header>
+
+<nav>
+  <a th:href="@{/}">Inicio</a>
+  <a th:href="@{/animales}">Fauna</a>
+  <a th:href="@{/programa}">Programas</a>
+  <a th:href="@{/reglas}">Reglamento</a>
+  <a th:href="@{/investigaciones}">Investigaciones</a>
+  <a th:href="@{/noticias}">Noticias</a>
+
+</nav>
+
+<div class="content">
+  <div class="table-container">
+    <h2>Investigaciones en el Cañón de Santa Elena</h2>
+    <input type="text" id="search" class="search-bar" placeholder="🔍 Buscar invest..." onkeyup="filtrarTabla()">
+
+    <div class="table-wrapper">
+      <table id="investigacionesTable">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="inv : ${listaInvestigaciones}">
+          <td th:text="${inv.idInvestigacion}"></td>
+          <td>
+            <button class="info-button"
+                    th:attr="data-numero=${inv.idInvestigacion}, data-descripcion=${inv.nombreInvestigador}"
+                    onclick="mostrarDesdeDataset(this)">
+              Mostrar Información
+            </button>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(listaInvestigaciones)}">
+          <td colspan="2">No hay investigaciones disponibles.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="info-container">
+    <h2>Nombre del investigador</h2>
+    <p id="nombreInvestigador">Selecciona una investigación para ver quién la hizo.</p>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Cañón de Santa Elena. Todos los derechos reservados.
+</footer>
+
+<script th:src="@{/js/investigaciones-script.js}"></script>
+</body>
+</html>

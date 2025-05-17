@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cañón de Santa Elena</title>
+    <link rel="stylesheet" th:href="@{/css/animalesStyle.css}">
+</head>
+
+<header>
+    <h1>Cañón de Santa Elena</h1>
+    <p>Área Natural Protegida - México</p>
+
+    <div sec:authorize="isAuthenticated()">
+        <p class="welcome-message">¡Bienvenido, <span sec:authentication="name"></span>!</p>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+
+        <form th:action="@{/perfil}" method="get">
+            <button type="submit">Ir a perfil </button>
+        </form>
+    </div>
+
+    <div sec:authorize="!isAuthenticated()">
+        <button onclick="window.location.href='/login'">Iniciar Sesión</button>
+    </div>
+</header>
+
+
+
+
+
+<nav>
+    <a th:href="@{/}">Inicio</a>
+    <a th:href="@{/animales}">Fauna</a>
+    <a th:href="@{/programa}">Programas</a>
+    <a th:href="@{/reglas}">Reglamento</a>
+    <a th:href="@{/investigaciones}">Investigaciones</a>
+    <a th:href="@{/noticias}">Noticias</a>
+
+</nav>
+
+<div th:if="${animalInfo}"
+     th:attr="data-nombre=${animalInfo.nombreCientifico}, data-imagen=${animalInfo.imagen}"
+     id="info-animal-container">
+</div>
+
+
+
+<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+<div class="content">
+
+    <div class="table-container">
+        <h2>Animales en el Cañón de Santa Elena</h2>
+        <input type="text" id="search" class="search-bar" placeholder="🔍 Buscar animal..." onkeyup="filtrarTabla()">
+
+        <div class="table-wrapper">
+            <table id="animalTable">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre Científico</th>
+                    <th>Nombre Común</th>
+                    <th>Riesgo</th>
+                    <th>Acción</th>
+                    <th>Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="animal : ${animales}">
+                    <td th:text="${animal.idAnimal}"></td>
+                    <td th:text="${animal.nombreCientifico}"></td>
+                    <td th:text="${animal.nombreComun}"></td>
+                    <td th:text="${animal.riesgo}"></td>
+                    <td>
+                        <button class="info-button"
+                                th:attr="data-nombre=${animal.nombreCientifico},  data-imagen=${animal.imagen}"
+                                onclick="generarInfoDesdeGemini(this)">
+                            Mostrar Información
+                        </button>
+
+                    </td>
+                    <td>
+                        <form th:action="@{/animales/agregar}" th:object="${animalFavorito}"  method="post">
+                            <input type="hidden" name="animalId" th:value="${animal.idAnimal}" />
+                            <button type="submit">Agregar a Favoritos</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(animales)}">
+                    <td colspan="5">No hay animales disponibles.</td>
+                    <form th:action="@{/animales}">
+                        <button type="submit">Mostrar todos</button>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="info-container">
+        <h2>Información del Animal</h2>
+        <p id="animalInfo">Selecciona un animal para ver más información.</p>
+    </div>
+
+
+    <div id="loading" style="display:none;" class="loading-spinner">
+        <p>Generando información del animal...</p>
+    </div>
+
+
+
+</div>
+
+<div class="image-container">
+    <h2>Imagen del Animal</h2>
+    <img id="animalImage" src="" alt="Imagen del animal" style="max-width: 100%; border-radius: 10px; display: none;">
+</div>
+
+<footer>
+    &copy; 2025 Cañón de Santa Elena. Todos los derechos reservados.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script th:src="@{/js/animal-script.js}"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const elem = document.getElementById('info-animal-container');
+
+        if (elem) {
+            const nombre = elem.getAttribute('data-nombre');
+            const imagen = elem.getAttribute('data-imagen');
+
+            if (nombre) {
+                generarInfoDesdeGemini(elem);
+            } else {
+                console.warn("Faltan datos del animal");
+            }
+        } else {
+            console.warn("Elemento no encontrado: el objeto animal podría ser nulo");
+        }
+    });
+
+</script>
+
+
+
+</body>
+</html>

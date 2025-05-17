@@ -1,0 +1,114 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('../images/4k.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #333;
+}
+header {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    text-align: center;
+    padding: 7px;
+}
+nav {
+    background-color: rgba(255,255,255,0.85);
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    border-radius: 6px;
+}
+nav a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 6px;
+}
+nav a:hover {
+    background-color: #333;
+    color: #fff;
+}
+.content {
+    align-items: flex-start; /* ✅ Evita que ambas crezcan al mismo ritmo */
+    display: flex;
+    width: 85%;
+    margin: 40px auto;
+    gap: 20px;
+}
+.table-container {
+    flex: 3;
+    max-height: 500px; /* ✅ Altura máxima */
+    overflow-y: auto;  /* ✅ Scroll si excede */
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+}
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.table-wrapper {
+    max-height: 300px; /* ✅ Altura máxima con scroll */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background-color: #333;
+    color: white;
+}
+.info-container {
+    flex: 2;
+    overflow-y: auto; /* ✅ Permite scroll si crece demasiado */
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+.welcome-message {
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+.info-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.info-button:hover {
+    background-color: #0056b3;
+}
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}

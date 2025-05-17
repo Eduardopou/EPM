@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noticias - Cañón de Santa Elena</title>
+  <link rel="stylesheet" th:href="@{/css/noticiasStyle.css}">
+</head>
+<body>
+
+<header>
+  <h1>Cañón de Santa Elena</h1>
+  <p>Área Natural Protegida - México</p>
+
+  <div sec:authorize="isAuthenticated()">
+    <p class="welcome-message">¡Bienvenido, <span sec:authentication="name"></span>!</p>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit">Cerrar sesión</button>
+    </form>
+    <form th:action="@{/perfil}" method="get">
+      <button type="submit">Ir a perfil </button>
+    </form>
+  </div>
+
+  <div sec:authorize="!isAuthenticated()">
+    <button onclick="window.location.href='/login'">Iniciar Sesión</button>
+  </div>
+</header>
+
+<nav>
+  <a th:href="@{/}">Inicio</a>
+  <a th:href="@{/animales}">Fauna</a>
+  <a th:href="@{/programa}">Programas</a>
+  <a th:href="@{/reglas}">Reglamento</a>
+  <a th:href="@{/investigaciones}">Investigaciones</a>
+  <a th:href="@{/noticias}">Noticias</a>
+</nav>
+
+<div class="container">
+  <h2>Últimas Noticias</h2>
+
+  <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Buscar por título...">
+
+  <div class="news-grid" id="newsGrid">
+    <div class="news-card" th:each="noticia : ${noticias}"
+         th:attr="data-title=${noticia.titulo.toLowerCase()}">
+      <img th:src="${noticia.imagen}" alt="Imagen noticia">
+      <div class="news-content">
+        <h3 th:text="${noticia.titulo}"></h3>
+        <p class="news-date" th:text="${#temporals.format(noticia.fechaPublicacion, 'dd MMM yyyy')}"></p>
+        <p th:text="${noticia.descripcion}"></p>
+        <a th:href="${noticia.url}" target="_blank">Leer más</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Cañón de Santa Elena. Todos los derechos reservados.
+</footer>
+
+<script th:src="@{/js/noticias-script.js}"></script>
+</body>
+</html>

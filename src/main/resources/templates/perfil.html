@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil - Cañón de Santa Elena</title>
+  <link rel="stylesheet" th:href="@{/css/porfileStyle.css}">
+
+</head>
+<body>
+<header>
+  <h1>Cañón de Santa Elena</h1>
+</header>
+
+<nav>
+  <a th:href="@{/}">Inicio</a>
+  <a th:href="@{/perfil}" class="active">Mi Perfil</a>
+  <a th:href="@{/logout}">Cerrar Sesión</a>
+</nav>
+
+<div th:if="${exito}" class="alert alert-success">
+  <p th:text="${exito}"></p>
+</div>
+
+<div th:if="${error}" class="alert alert-danger">
+  <p th:text="${error}"></p>
+</div>
+
+
+<div class="profile-container">
+  <!-- Sección de Datos de Usuario -->
+  <div class="profile-section">
+    <h2>Mis Datos</h2>
+    <form th:action="@{/perfil/actualizar}" method="post" class="profile-form" th:object="${usuario}">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" th:value="${usuario.nombre}" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" th:value="${usuario.email}" required>
+      </div>
+      <button type="submit" class="btn-save">Guardar Cambios</button>
+    </form>
+  </div>
+
+</div>
+
+<div class="table-wrapper">
+  <table id="animalTable">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre Científico</th>
+      <th>Nombre Común</th>
+      <th>Riesgo</th>
+      <th>Acción</th>
+      <th>Acción</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="animal : ${listaFavoritos}">
+      <td th:text="${animal.idAnimal}"></td>
+      <td th:text="${animal.nombreCientifico}"></td>
+      <td th:text="${animal.nombreComun}"></td>
+      <td th:text="${animal.riesgo}"></td>
+      <td>
+        <form th:action="@{/animales/enviar}" method="get">
+          <input type="hidden" name="id" th:value="${animal.idAnimal}" />
+          <button type="submit">Mostrar información</button>
+        </form>
+
+      </td>
+      <td>
+        <form th:action="@{/perfil/eliminarFavorito}" th:object="${animalFavorito}"  method="post">
+          <input type="hidden" name="animalId" th:value="${animal.idAnimal}" />
+          <button type="submit">Eliminar de Favoritos</button>
+        </form>
+      </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(listaFavoritos)}">
+      <td colspan="5">No hay animales disponibles.</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+<footer>
+  &copy; 2025 Cañón de Santa Elena. Todos los derechos reservados.
+</footer>
+
+<script th:src="@{/js/profile.js}"></script>
+</body>
+</html>

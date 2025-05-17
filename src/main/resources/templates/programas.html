@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Cañón de Santa Elena - Programas</title>
+    <link rel="stylesheet" th:href="@{/css/programasStyle.css}">
+</head>
+<body>
+
+<header>
+    <h1>Cañón de Santa Elena</h1>
+    <p>Área Natural Protegida - México</p>
+
+    <div sec:authorize="isAuthenticated()">
+        <p class="welcome-message">¡Bienvenido, <span sec:authentication="name"></span>!</p>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+
+        <form th:action="@{/perfil}" method="get">
+            <button type="submit">Ir a perfil </button>
+        </form>
+    </div>
+
+    <div sec:authorize="!isAuthenticated()">
+        <button onclick="window.location.href='/login'">Iniciar Sesión</button>
+    </div>
+</header>
+
+<nav>
+    <a th:href="@{/}">Inicio</a>
+    <a th:href="@{/animales}">Fauna</a>
+    <a th:href="@{/programa}" class="active">Programas</a>
+    <a th:href="@{/reglas}">Reglamento</a>
+    <a th:href="@{/investigaciones}">Investigaciones</a>
+    <a th:href="@{/noticias}">Noticias</a>
+
+</nav>
+
+<div class="content">
+    <!-- Tabla de Programas -->
+    <div class="table-container">
+        <h2>Programas del Cañón</h2>
+        <input type="text" id="search" class="search-bar" placeholder="🔍 Buscar programa..." onkeyup="filtrarTabla()">
+
+        <div class="table-wrapper">
+            <table id="programasTable">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="programa : ${listaProgramas}">
+                    <td th:text="${programa.id}"></td>
+                    <td th:text="${programa.nombre}"></td>
+                    <td>
+                        <button class="info-button"
+                                th:attr="data-nombre=${programa.nombre}, data-descripcion=${programa.descripcion}"
+                                onclick="mostrarDesdeDataset(this)">
+                            Mostrar Información
+                        </button>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(listaProgramas)}">
+                    <td colspan="2">No hay programas disponibles.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Información del programa -->
+    <div class="info-container">
+        <h2>Información del Programa</h2>
+        <p id="programaInfo">Selecciona un programa para ver su información.</p>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 Cañón de Santa Elena. Todos los derechos reservados.
+</footer>
+
+<script th:src="@{/js/programas-script.js}"></script>
+</body>
+</html>
